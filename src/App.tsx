@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { invoke } from '@tauri-apps/api';
 
 import handleChange from './functions/handleChange';
@@ -36,46 +36,46 @@ function App() {
   }
 
   return (
-    <main>
-      <h1>Text Ops</h1>
-      <input type="text" value={message} onChange={onMessageChange} />
-      <form>
+    <main className="w-screen h-screen flex flex-col bg-gradient-to-t from-yellow-600 to-red-600">
+      <h1 className="text-center text-5xl p-5 font-display">Text Ops</h1>
+      <input placeholder="Message" className="m-5 rounded" type="text" value={message} onChange={onMessageChange} />
+      <p className="text-center">{output}</p>
+      <form className="m-5 flex flex-row justify-evenly bg-gray-600 p-5 rounded text-white">
         <label>
-          Reverse
+          Reverse&nbsp;&nbsp;
           <input id="reverse" type="checkbox" checked={checkboxes.reverse} onChange={onOpsChange} />
         </label>
 
         <label>
-          Weirdify
+          Weirdify&nbsp;&nbsp;
           <input id="weirdify" type="checkbox" checked={checkboxes.weirdify} onChange={onOpsChange} />
         </label>
 
         <label>
-          Capitalize
+          Capitalize&nbsp;&nbsp;
           <input id="capitalize" type="checkbox" checked={checkboxes.capitalize} onChange={onOpsChange} />
         </label>
 
         <label>
-          Uncapitalize
+          Uncapitalize&nbsp;&nbsp;
           <input id="uncapitalize" type="checkbox" checked={checkboxes.uncapitalize} onChange={onOpsChange} />
         </label>
 
         <label>
-          Owoify
+          Owoify&nbsp;&nbsp;
           <input id="owoify" type="checkbox" checked={checkboxes.owoify} onChange={onOpsChange} />
         </label>
 
         <label>
-          Uwuify
+          Uwuify&nbsp;&nbsp;
           <input id="uwuify" type="checkbox" checked={checkboxes.uwuify} onChange={onOpsChange} />
         </label>
         
         <label>
-          Uvuify
+          Uvuify&nbsp;&nbsp;
           <input id="uvuify" type="checkbox" checked={checkboxes.uvuify} onChange={onOpsChange} />
         </label>
       </form>
-      <p>{output}</p>
     </main>
   );
 }

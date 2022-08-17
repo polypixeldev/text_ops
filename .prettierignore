@@ -1,0 +1,3 @@
+.prettierignore
+dist
+src-tauri/target
