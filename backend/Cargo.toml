@@ -12,7 +12,3 @@ owoify_rs = "1.0.0"
 [lib]
 name = "text_ops_lib"
 path = "src/lib.rs"
-
-[[bin]]
-name = "text_ops_cli"
-path = "src/bin.rs"

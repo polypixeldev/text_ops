@@ -61,6 +61,34 @@
         "title": "Text Ops",
         "width": 800
       }
-    ]
+    ],
+    "cli": {
+      "description": "Perform various operations on text",
+      "args": [
+        {
+          "name": "message",
+          "index": 1,
+          "takesValue": true,
+          "required": true
+        },
+        {
+          "name": "ops",
+          "index": 2,
+          "takesValue": true,
+          "multiple": true,
+          "required": true,
+          "possibleValues": [
+            "reverse",
+            "weirdify",
+            "capitalize",
+            "uncapitalize",
+            "owoify",
+            "uwuify",
+            "uvuify",
+            "all"
+          ]
+        }
+      ]
+    }
   }
 }
