@@ -28,7 +28,6 @@ impl fmt::Display for Ops {
 #[tauri::command]
 fn transform(message: String, ops: Vec<String>) -> String {
   let mut transformed_message = message;
-  println!("{:?}", ops);
 
   for op in ops {
     transformed_message = match op.as_str() {

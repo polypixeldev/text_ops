@@ -112,13 +112,11 @@ function App() {
 
   const onMessageChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
-      console.log(opArr);
       handleChange(setMessage)(event);
       const transformed = (await invoke("transform", {
         message: event.target.value,
         ops: opArr,
       })) as string;
-      console.log(transformed);
       setOutput(transformed);
     },
     [opArr]
