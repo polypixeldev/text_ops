@@ -284,8 +284,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "text_ops"
-version = "0.1.0"
+name = "text_ops_lib"
+version = "1.0.0"
 dependencies = [
  "clap",
  "owoify_rs",

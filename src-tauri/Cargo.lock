@@ -54,18 +54,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "508b352bb5c066aac251f6daf6b36eccd03e8a88e8081cd44959ea277a3af9a8"
 
 [[package]]
-name = "app"
-version = "0.1.0"
-dependencies = [
- "clap",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "text_ops",
-]
-
-[[package]]
 name = "atk"
 version = "0.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2997,7 +2985,19 @@ dependencies = [
 
 [[package]]
 name = "text_ops"
-version = "0.1.0"
+version = "1.0.0"
+dependencies = [
+ "clap",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "text_ops_lib",
+]
+
+[[package]]
+name = "text_ops_lib"
+version = "1.0.0"
 dependencies = [
  "clap",
  "owoify_rs",
