@@ -56,7 +56,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 300,
+        "height": 400,
         "resizable": true,
         "title": "Text Ops",
         "width": 800

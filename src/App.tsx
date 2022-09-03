@@ -1,5 +1,8 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { invoke } from '@tauri-apps/api';
+import { useDrop } from 'react-dnd';
+
+import { Op, OpItem } from './op';
 
 import handleChange from './functions/handleChange';
 
@@ -8,74 +11,124 @@ import './App.css'
 function App() {
   const [message, setMessage] = useState('');
   const [output, setOutput] = useState('');
-  const [ops, setOps] = useState(['']);
-  const [checkboxes, setCheckboxes] = useState({
-    reverse: false,
-    weirdify: false,
-    capitalize: false,
-    uncapitalize: false,
-    owoify: false,
-    uwuify: false,
-    uvuify: false
-  });
+  const [opArr, setOpArr] = useState<string[]>([]);
+  const [opBank, setOpBank] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  async function onMessageChange(event: ChangeEvent<HTMLInputElement>) {
+  const findCard = useCallback(
+    (id: string) => {
+      let index: number;
+      let bank: boolean;
+
+      const find = opBank.find((c) => c === id);
+
+      if (find !== undefined) {
+        index = opBank.indexOf(id);
+        bank = true;
+      } else {
+        index = opArr.indexOf(id);
+        bank = false;
+      }
+
+      return {
+        index: index,
+        bank
+      }
+    },
+    [opArr, opBank],
+  );
+
+  const moveCard = useCallback(
+    (id: string, to: number, toBank: boolean) => {
+      const { index, bank } = findCard(id);
+      
+      const newOpBank = [...opBank];
+      const newOpArr = [...opArr];
+
+      if (bank) {
+        newOpBank.splice(index, 1);
+      } else {
+        newOpArr.splice(index, 1)
+      }
+
+      if (toBank) {
+        newOpBank.splice(to, 0, id);
+      } else {
+        newOpArr.splice(to, 0, id)
+      }
+
+      setOpBank(newOpBank);
+      setOpArr(newOpArr);
+    },
+    [findCard, opArr, setOpArr, opBank, setOpBank],
+  )
+
+  const onArrHover = useCallback(({ id: draggedId}: OpItem) => {
+    if (opArr.length === 0) {
+      moveCard(draggedId, 0, false)
+    }
+  }, [opArr, moveCard])
+
+  const [, arrDrop] = useDrop(() => ({
+    accept: "op",
+    hover: onArrHover
+  }), [onArrHover]);
+
+  const onBankHover = useCallback(({ id: draggedId}: OpItem) => {
+    if (opBank.length === 0) {
+      moveCard(draggedId, 0, true)
+    }
+  }, [opBank, moveCard])
+
+  const [, bankDrop] = useDrop(() => ({
+    accept: "op",
+    hover: onBankHover
+  }), [onBankHover]);
+
+  useEffect(() => {
+    invoke('get_ops').then((ops) => {
+      setOpBank(ops as string[]);
+      setLoading(false);
+    })
+  }, [])
+
+  useEffect(() => {
+    invoke('transform', { message, ops: opArr }).then((transformed) => {
+      setOutput(transformed as string);
+    })
+  }, [message, opArr]);
+
+  const onMessageChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(opArr)
     handleChange(setMessage)(event);
-    const transformed = await invoke('transform', { message: event.target.value, ops: ops[0] == '' ? [] : ops }) as string;
+    const transformed = await invoke('transform', { message: event.target.value, ops: opArr }) as string;
+    console.log(transformed)
     setOutput(transformed);
-  }
+  }, [opArr])
 
-  async function onOpsChange(event: ChangeEvent<HTMLInputElement>) {
-    const newCheckboxes = { ...checkboxes, [event.target.id]: event.target.checked };
-    setCheckboxes(newCheckboxes);
-    const newOps = Object.entries(newCheckboxes).map(([k, v]) => v == true ? k : null).filter(v => v != null) as string[]
-    setOps(newOps);
-
-    const transformed = await invoke('transform', { message, ops: newOps[0] == '' ? [] : newOps }) as string;
-    setOutput(transformed);
-  }
-
-  return (
+  return loading ? null : (
     <main className="w-screen h-screen flex flex-col bg-gradient-to-t from-yellow-600 to-red-600">
       <h1 className="text-center text-5xl p-5 font-display">Text Ops</h1>
       <input placeholder="Message" className="m-5 rounded" type="text" value={message} onChange={onMessageChange} />
       <p className="text-center">{output}</p>
-      <form className="m-5 flex flex-row justify-evenly bg-gray-600 p-5 rounded text-white">
-        <label>
-          Reverse&nbsp;&nbsp;
-          <input id="reverse" type="checkbox" checked={checkboxes.reverse} onChange={onOpsChange} />
-        </label>
-
-        <label>
-          Weirdify&nbsp;&nbsp;
-          <input id="weirdify" type="checkbox" checked={checkboxes.weirdify} onChange={onOpsChange} />
-        </label>
-
-        <label>
-          Capitalize&nbsp;&nbsp;
-          <input id="capitalize" type="checkbox" checked={checkboxes.capitalize} onChange={onOpsChange} />
-        </label>
-
-        <label>
-          Uncapitalize&nbsp;&nbsp;
-          <input id="uncapitalize" type="checkbox" checked={checkboxes.uncapitalize} onChange={onOpsChange} />
-        </label>
-
-        <label>
-          Owoify&nbsp;&nbsp;
-          <input id="owoify" type="checkbox" checked={checkboxes.owoify} onChange={onOpsChange} />
-        </label>
-
-        <label>
-          Uwuify&nbsp;&nbsp;
-          <input id="uwuify" type="checkbox" checked={checkboxes.uwuify} onChange={onOpsChange} />
-        </label>
-        
-        <label>
-          Uvuify&nbsp;&nbsp;
-          <input id="uvuify" type="checkbox" checked={checkboxes.uvuify} onChange={onOpsChange} />
-        </label>
-      </form>
+      <div ref={arrDrop} className="m-5 flex flex-row justify-evenly bg-gray-600 p-5 rounded text-white">
+        {
+          opArr.length == 0 ? <p draggable="false">Empty</p> : opArr.map((op, i) => {
+            return (
+              <Op key={i} id={op} findCard={findCard} moveCard={moveCard} bank={false} />
+            )
+          })
+        }
+      </div>
+      <div ref={bankDrop} className="m-5 flex flex-row justify-evenly bg-gray-600 p-5 rounded text-white">
+        {
+          opBank.map((op, i) => {
+            return (
+              <Op key={i} id={op} findCard={findCard} moveCard={moveCard} bank={true} />
+            )
+          })
+        }
+      </div>
     </main>
   );
 }

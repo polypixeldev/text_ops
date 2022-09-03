@@ -3,6 +3,7 @@
   windows_subsystem = "windows"
 )]
 
+use std::fmt;
 use text_ops_lib::TextOps;
 use clap::ValueEnum;
 
@@ -18,24 +19,38 @@ enum Ops {
     All
 }
 
+impl fmt::Display for Ops {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    write!(f, "{:?}", self)
+  }
+}
+
 #[tauri::command]
 fn transform(message: String, ops: Vec<String>) -> String {
   let mut transformed_message = message;
+  println!("{:?}", ops);
 
   for op in ops {
     transformed_message = match op.as_str() {
-      "reverse" => transformed_message.reverse(),
-      "weirdify" => transformed_message.weirdify(),
-      "capitalize" => transformed_message.capitalize(),
-      "uncapitalize" => transformed_message.uncapitalize(),
-      "owoify" => transformed_message.owoify(),
-      "uwuify" => transformed_message.uwuify(),
-      "uvuify" => transformed_message.uvuify(),
+      "Reverse" => transformed_message.reverse(),
+      "Weirdify" => transformed_message.weirdify(),
+      "Capitalize" => transformed_message.capitalize(),
+      "Uncapitalize" => transformed_message.uncapitalize(),
+      "Owoify" => transformed_message.owoify(),
+      "Uwuify" => transformed_message.uwuify(),
+      "Uvuify" => transformed_message.uvuify(),
+      "All" => transformed_message.reverse().weirdify().capitalize().uncapitalize().owoify().uwuify().uvuify(),
       _ => transformed_message
     }.to_string()
   }
 
   transformed_message
+}
+
+#[tauri::command]
+fn get_ops() -> Vec<String> {
+  let enum_variants = Ops::value_variants();
+  enum_variants.iter().map(|v| v.to_string()).collect()
 }
 
 fn main() {
@@ -76,7 +91,7 @@ fn main() {
 
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![transform])
+    .invoke_handler(tauri::generate_handler![transform, get_ops])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
