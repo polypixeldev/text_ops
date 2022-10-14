@@ -281,12 +281,25 @@ dependencies = [
  "atty",
  "bitflags",
  "clap_derive",
- "clap_lex",
+ "clap_lex 0.2.4",
  "indexmap",
  "once_cell",
  "strsim",
  "termcolor",
  "textwrap",
+]
+
+[[package]]
+name = "clap"
+version = "4.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6bf8832993da70a4c6d13c581f4463c2bdda27b9bf1c5498dc4365543abe6d6f"
+dependencies = [
+ "atty",
+ "bitflags",
+ "clap_lex 0.3.0",
+ "strsim",
+ "termcolor",
 ]
 
 [[package]]
@@ -307,6 +320,15 @@ name = "clap_lex"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2850f2f5a82cbf437dd5af4d49848fbdfc27c157c3d010345776f952765261c5"
+dependencies = [
+ "os_str_bytes",
+]
+
+[[package]]
+name = "clap_lex"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d4198f73e42b4936b35b5bb248d81d2b595ecb170da0bac7655c54eedfa8da8"
 dependencies = [
  "os_str_bytes",
 ]
@@ -2712,7 +2734,7 @@ checksum = "efbf22abd61d95ca9b2becd77f9db4c093892f73e8a07d21d8b0b2bf71a7bcea"
 dependencies = [
  "anyhow",
  "attohttpc",
- "clap",
+ "clap 3.2.22",
  "cocoa",
  "dirs-next",
  "embed_plist",
@@ -2920,7 +2942,7 @@ dependencies = [
 name = "text_ops"
 version = "1.0.0"
 dependencies = [
- "clap",
+ "clap 4.0.15",
  "serde",
  "serde_json",
  "tauri",
@@ -2932,7 +2954,7 @@ dependencies = [
 name = "text_ops_lib"
 version = "1.0.0"
 dependencies = [
- "clap",
+ "clap 3.2.22",
  "owoify_rs",
 ]
 
