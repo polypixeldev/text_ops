@@ -280,26 +280,11 @@ checksum = "86447ad904c7fb335a790c9d7fe3d0d971dc523b8ccd1561a520de9a85302750"
 dependencies = [
  "atty",
  "bitflags",
- "clap_derive",
  "clap_lex",
  "indexmap",
- "once_cell",
  "strsim",
  "termcolor",
  "textwrap",
-]
-
-[[package]]
-name = "clap_derive"
-version = "3.2.18"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea0c8bce528c4be4da13ea6fead8965e95b6073585a2f05204bd8f4119f82a65"
-dependencies = [
- "heck 0.4.0",
- "proc-macro-error",
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -2932,7 +2917,6 @@ dependencies = [
 name = "text_ops_lib"
 version = "1.0.0"
 dependencies = [
- "clap",
  "owoify_rs",
 ]
 
