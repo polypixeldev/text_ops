@@ -32,7 +32,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-tailwindcss": "^3.11.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.0",
+    "lint-staged": "^13.2.1",
     "postcss": "^8.4.20",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "^0.2.7",
