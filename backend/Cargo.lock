@@ -48,9 +48,9 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
 name = "owoify_rs"
-version = "1.0.0"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "60cff2350875a9ccee0655bc548b37bbb35cb1a95697e587a1e06639c08e677b"
+checksum = "dcac2403912317da2e61d1490b5e4d036a7edb0cff9b69045a7c951efd08063e"
 dependencies = [
  "lazy_static",
  "rand",
